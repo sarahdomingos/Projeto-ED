@@ -1,4 +1,5 @@
 import random
+from utils import checkMatriculaExiste
 from MenuPrincipal import menu_Principal
 
 #Esta função é chamada quando o usuário apresenta uma entrada inválida
@@ -96,8 +97,11 @@ def matricular_calouros(inicio):
         print("Entrada inválida! O CPF deve conter apenas números.")
         tente_novamente("iniciar")
 
+    matriculaValida = False 
 
-    matricula = random.randint(10000,20000)
+    while (not matriculaValida):
+        matricula = random.randint(10000,20000)
+        matriculaValida = checkMatriculaExiste(matricula)
 
     curso = "Ciência da Computação"
 

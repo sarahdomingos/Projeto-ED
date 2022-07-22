@@ -70,7 +70,7 @@ def menu_Principal(inicio):
     print("############################################################\n")
     print("                 Menu do Sistema do Estudante\n")
     print("As opções disponíveis são:\n")
-    print("1 - Fazer matrícula (apenas para calouros")
+    print("1 - Fazer matrícula (apenas para calouros)")
     print("2 - Fazer matrícula (veteranos)")
     print("3 - Ajuste")
     print("4 - Reajuste\n")
@@ -104,6 +104,12 @@ def menu_Principal(inicio):
            
            import Matricula
            Matricula.matricular_calouros("iniciar")
+
+        if opcaoConvert == 3:
+
+            from Ajuste import ajustar
+            ajustar("iniciar")
+
 
 
 menu_Principal('iniciar')
