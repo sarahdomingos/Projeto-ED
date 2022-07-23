@@ -1,7 +1,43 @@
 import openpyxl
 
-def verificar_horarios(disciplina, aluno_atual, flag):
-    pass
+def verificar_horarios(dia, hora, matr_atuais, cc_obrig, cc_elet, checagem, flag):
+    
+    if (checagem == 0):
+        return flag
+
+    flag1 = 0
+    atual = matr_atuais[checagem - 1]
+    for row in cc_obrig.values:
+        for value in row:
+            if (value == atual):
+                tupla = row
+                flag1 = 1
+                break
+    
+    if (flag1 == 0):
+        atual = matr_atuais[checagem - 1]
+        for row in cc_elet.values:
+            for value in row:
+                if (value == atual):
+                    tupla = row
+                    break
+
+    verificar = list(tupla)
+    if (flag1 == 1):
+        dia_v = verificar[5].split(', ')
+        hora_v = verificar[6].split(' - ')
+    elif (flag1 == 0):
+        dia_v = verificar[4].split(', ')
+        hora_v = verificar[5].split(' - ')
+
+    for i in dia:
+        for j in dia_v:
+            if (i == j and hora[0] == hora_v[0]):
+                flag = flag + 1
+                break
+        
+    checagem = checagem - 1
+    return verificar_horarios(dia, hora, matr_atuais, cc_obrig, cc_elet, checagem, flag)
 
 def verificar_pre_requisito(disciplinas_pagas, disciplina, aluno_atual, flag):
     
@@ -52,7 +88,7 @@ def pedir_disciplina (aluno_atual, cc_obrig, cc_elet, matr_atuais):
         aluno_atual[3] = aluno_atual[3] + 1
         aluno_atual[7] = matr_atuais
         print ('\nVocê atingiu o limite máximo de 10 disciplinas para esse período.\nSessão encerrada.\n')
-        return 0
+        return matr_atuais
     
     #Verifica se o aluno pode sair, já que precisa de ao menos 3 disciplinas.
     elif (opcao == 2 and cont < 3):
@@ -62,7 +98,7 @@ def pedir_disciplina (aluno_atual, cc_obrig, cc_elet, matr_atuais):
     elif (opcao == 2):
         aluno_atual[3] = aluno_atual[3] + 1
         aluno_atual[7] = matr_atuais
-        return 0
+        return matr_atuais
     
     else:
         
@@ -88,7 +124,7 @@ def pedir_disciplina (aluno_atual, cc_obrig, cc_elet, matr_atuais):
                 for value in row:
                     if (value == verificar):
                         codigo = row
-                        flag = 1
+                        flag = 2
                         break
         
         #informa um erro de código inexistente.  
@@ -101,21 +137,30 @@ def pedir_disciplina (aluno_atual, cc_obrig, cc_elet, matr_atuais):
 
         #Chama a função de verificação.
         result_requis = verificar_pre_requisito(disciplinas_pagas, disciplina, aluno_atual, 0)
-        result_horario = verificar_horarios(disciplina, aluno_atual, 0)
+        checagem = len(matr_atuais)
+        if (flag == 1):
+            dia = disciplina[5].split(', ')
+            hora = disciplina[6].split(' - ')
+        elif (flag == 2):
+            dia = disciplina[4].split(', ')
+            hora = disciplina[5].split(' - ')
+        result_horario = verificar_horarios(dia, hora, matr_atuais, cc_obrig, cc_elet, checagem, 0)
     
         #Condição executada caso a o aluno esteja em dia com os pré requisitos.
-        if (result_requis == 1):
+        if (result_requis >= 1 and result_horario == 0):
             matr_atuais.append(verificar)
             print ('\nMatrícula realizada com sucesso!')
             print ('Você já está matriculado em:\n')
             for i in matr_atuais:
                 print (f'{i}')
-                
             return pedir_disciplina(aluno_atual, cc_obrig, cc_elet, matr_atuais)
         
-        #Condição executada caso o aluno não possua algum pré requisito.
-        else:
+        #Condição executada caso o aluno não possua algum pré requisito ou haja choque de horários.
+        elif (result_requis == 0):
             print ('\nMatrícula negada!\nVocê não possui os requisitos dessa disciplina.\n')
+            return pedir_disciplina(aluno_atual, cc_obrig, cc_elet, matr_atuais)
+        elif (result_horario > 0):
+            print ('Matrícula negada!\nVocê já está matriculado em disciplina(s) nesse mesmo dia/hora,\nnão pode haver choque de horários.\n')
             return pedir_disciplina(aluno_atual, cc_obrig, cc_elet, matr_atuais)
         
 #Primeiro comando a ser executado na tela.
@@ -151,8 +196,9 @@ print (f'Fluxo: {aluno_atual[4]}.')
 print (f'Matrículas do período: {aluno_atual[7]}.')
 print ('\n-----------------------------------------\n')
 
+periodo = int(aluno_atual[3])
 matr_atuais = []
-pedir_disciplina(aluno_atual, cc_obrig, cc_elet, matr_atuais)
+matr = pedir_disciplina(aluno_atual, cc_obrig, cc_elet, matr_atuais)
 
 #Tela com as informações atualizadas do aluno que efetuou sua matrícula.
 print ('\n----------DADOS DO(A) ALUNO(A)----------\n')
@@ -166,12 +212,13 @@ print ('\n-----------------------------------------\n')
 
 #Atualiza os valores na planilha.
 i = 1
+
 for row in pagina.values:
     for value in row:
         if (value == matricula):
-            pagina.cell(row=i, column=4).value = aluno[3]
-            disciplinas_ativas = ', '.join(aluno[7])
-            pagina.cell(row=i, column=8).value = disciplinas_ativas
+            pagina.cell(row=i, column=4).value = periodo + 1
+            disc_ativas = ', '.join(matr)
+            pagina.cell(row=i, column=8).value = disc_ativas
             break
     i = i + 1
 
