@@ -1,10 +1,9 @@
 
-#from Ajuste import ajustar
-#from Reajuste import reajustar
+# from Ajuste import ajustar
+# from Reajuste import reajustar
 
-#Esta função é chamada quando o usuário apresenta uma entrada inválida
+# Esta função é chamada quando o usuário apresenta uma entrada inválida
 def tente_novamente(inicio):
-
     print("------------------------------------------------\n")
     print("Gostaria de tentar novamente?\n")
     print("1 - Sim")
@@ -12,12 +11,11 @@ def tente_novamente(inicio):
 
     opcao = input("Digite o número correspondente a sua resposta: ")
 
-    #Aqui estamos dizendo que uma entrada vazia pode ser interpretada como um espaço vazio
+    # Aqui estamos dizendo que uma entrada vazia pode ser interpretada como um espaço vazio
     if opcao == '':
-
         opcao = ' '
 
-    #Aqui estamos verificando se a entrada dada pelo usuário é um número inteiro
+    # Aqui estamos verificando se a entrada dada pelo usuário é um número inteiro
     try:
         int(opcao)
         verificacao_numero_inteiro = True
@@ -25,28 +23,25 @@ def tente_novamente(inicio):
     except ValueError:
         verificacao_numero_inteiro = False
 
-    #Se a entrada for um número inteiro, então...
+    # Se a entrada for um número inteiro, então...
     if verificacao_numero_inteiro == True:
 
-        #Transformamos a entrada que estaa no formato de escrita em numeral
+        # Transformamos a entrada que estaa no formato de escrita em numeral
         opcaoConvert = int(opcao)
 
-        #Se o usuário escolher a opção 1, então o mandamos de volta para o menu inicial
+        # Se o usuário escolher a opção 1, então o mandamos de volta para o menu inicial
         if opcaoConvert == 1:
-
             menu_Principal('iniciar')
 
-        #Se o usuário escolher a opção 2, então encerramos o programa
+        # Se o usuário escolher a opção 2, então encerramos o programa
         if opcaoConvert == 2:
-
             print("------------------------------------------")
             print("Programa encerrado.")
             print("------------------------------------------")
             exit()
 
-        #Se a entrada não for nem 1 e nem 2, então chamamos novamente a função de erro "tente_novamente"
+        # Se a entrada não for nem 1 e nem 2, então chamamos novamente a função de erro "tente_novamente"
         if opcaoConvert != 1 and opcaoConvert != 2:
-
             print("*********************************\n")
             print("Entrada Inválida!")
             print("Você só pode digitar 1 ou 2.")
@@ -54,19 +49,18 @@ def tente_novamente(inicio):
 
             tente_novamente('iniciar')
 
-    #Se a entrada não for um número inteiro, então chamamos a função de erro 'tente_novamente'
+    # Se a entrada não for um número inteiro, então chamamos a função de erro 'tente_novamente'
     if verificacao_numero_inteiro == False:
+        print("*********************************\n")
+        print("Entrada Inválida!")
+        print("Você só pode digitar 1 ou 2.\n")
+        print("*********************************\n")
 
-            print("*********************************\n")
-            print("Entrada Inválida!")
-            print("Você só pode digitar 1 ou 2.\n")
-            print("*********************************\n")
+        tente_novamente('iniciar')
 
-            tente_novamente('iniciar')
 
-#Esta função representa o menu inicial exibido para o usuário
+# Esta função representa o menu inicial exibido para o usuário
 def menu_Principal(inicio):
-
     print("############################################################\n")
     print("                 Menu do Sistema do Estudante\n")
     print("As opções disponíveis são:\n")
@@ -77,7 +71,7 @@ def menu_Principal(inicio):
 
     opcao = input("Digite o número correspondente a sua escolha: ")
 
-    #Aqui estamos verificando se a entrada dada pelo usuário é um número inteiro
+    # Aqui estamos verificando se a entrada dada pelo usuário é um número inteiro
     try:
         int(opcao)
         verificacao_numero_inteiro = True
@@ -85,30 +79,21 @@ def menu_Principal(inicio):
     except ValueError:
         verificacao_numero_inteiro = False
 
-    #Se a entrada não é um número inteiro, então chamamos a função de erro
+    # Se a entrada não é um número inteiro, então chamamos a função de erro
     if verificacao_numero_inteiro == False:
-
         print("Entrada Inválida!")
         print("Você só pode digitar números inteiros enre 1 e 3.\n")
         tente_novamente("iniciar")
 
-    
-    #Se a entrada for um número inteiro, então...
+    # Se a entrada for um número inteiro, então...
     if verificacao_numero_inteiro == True:
 
-        #Transformamos a entrada que está no formato de escrita em numeral
+        # Transformamos a entrada que está no formato de escrita em numeral
         opcaoConvert = int(opcao)
 
-        
         if opcaoConvert == 1:
-           
-           import Matricula
-           Matricula.matricular_calouros("iniciar")
-
-        if opcaoConvert == 3:
-
-            from Ajuste import ajustar
-            ajustar("iniciar")
+            import Matricula
+            Matricula.matricular_calouros("iniciar")
 
 
 
