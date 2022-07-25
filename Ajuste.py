@@ -1,5 +1,6 @@
 # from MenuPrincipal import tente_novamente
-from utils import checkMatriculaExiste, resgatarDisciplinasAtivas, resgatarDadosDisciplinas
+from utils import checkMatriculaExiste, resgatarDisciplinasAtivas, resgatarDadosDisciplinas, removerDisciplina, resgatarMateriasPagas, resgatarMateriasPossiveisAjuste
+from tabulate import tabulate 
 
 def ajustar(inicio):
 
@@ -22,21 +23,94 @@ def ajustar(inicio):
         for i in range(0, len(disciplinas)):
             disciplinas[i] = resgatarDadosDisciplinas(disciplinas[i])
 
+        rows = [x.values() for x in disciplinas]
 
         print(f'Aluno: {matriculaValida[2]}')
         print(f'Número de matrícula: {matricula}\n')
 
-        print("Disciplinas:\n")
-        print("___________________________________________________________________________________________")
-        print("|          Disciplina          |       Carga Horária          |          Horários          |")
-        print("|_____________________________________________________________|____________________________|")
+        print("Disciplinas atuais:\n")
+        print(tabulate(rows, headers=["Código", "Nome", "Carga Horária", "Dias", "Horário"]))    
+        
+        print("Você deseja:\n")
+        print("1 - Sair de uma das disciplinas")            
+        print("2 - Se inscrever em uma disciplina diferente\n")   
 
-        for i in disciplinas:
             
-            print(f'|          {i["nome"]}       |            {i["carga horária"]}                |                            |')
-            print("|_____________________________________________________________|____________________________|")
+        escolha = input("Digite o número correspondente a sua escolha: ")
+        valid = False
 
-                
+        # Checa se é número
+        while (not valid):
+            try:
+                escolha = int(escolha)
+                if (escolha == 1 or escolha == 2):
+                    valid = True
+                else:
+                    print("Entrada inválida. Você só pode escolher entre 1 ou 2.")
+                    escolha = input("Digite o número correspondente à sua escolha: ")
+            except:
+                print("Entrada inválida. Por favor digite um número.")
+                valid = False
+                escolha = input("Digite o número correspondente a sua escolha: ")
+
+        if (escolha == 1):
+            newRows = []
+
+            for element in rows:
+                newRows.append(list(element))
+
+            for i in range(0, len(newRows)):
+                newRows[i].append(f"[{i+1}]")
+
+            print(tabulate(newRows))
+            print("Selecione a disciplina da qual você deseja ser removido: ")
+        
+            disc = input("> ") 
+        
+            valid = False
+            while (not valid):
+                try:
+                    disc = int(disc)
+                    if (disc <= 0 or disc > len(newRows)):
+                        print("Entrada inválida. Por favor escolher uma das opções disponíveis.")
+                        disc = input("Digite o número correspondente à sua escolha: ")
+                    else:
+                        valid = True 
+                except:
+                    print("Entrada inválida. Por favor digite um número.")
+                    valid = False
+                    disc = input("Digite o número correspondente a sua escolha: ")
+
+            materiaExcluida = newRows[disc-1]
+
+
+            res = removerDisciplina(materiaExcluida[0], matriculaValida[1])
+        
+            if (res == True ):
+                print(f'Você não está mais inscrito na disciplina {materiaExcluida[0]} - {materiaExcluida[1]}')
+            else:
+                print('Houve um na hora de persistir os dados')    
+
+        elif (escolha == 2):
+            print("As matérias que vc já pagou:")
+            materiasPagas = resgatarMateriasPagas(matriculaValida[1])
+            print(materiasPagas)
+            rows = []
+            disponiveis = resgatarMateriasPossiveisAjuste(materiasPagas)
+
+            rows = [x.values() for x in disponiveis]
+            print(tabulate(rows, headers=["Código", "Nome", "Carga Horária", "Dias", "Horário"]))
+
+            
+
+
+
+
+
+        
+
+
+
 
 
 
