@@ -1,6 +1,9 @@
 import random
 from utils import checkMatriculaExiste
-from MenuPrincipal import menu_Principal
+
+import openpyxl
+from openpyxl import Workbook, load_workbook
+from openpyxl.utils import get_column_letter
 
 #Esta função é chamada quando o usuário apresenta uma entrada inválida
 def tente_novamente(inicio):
@@ -34,6 +37,7 @@ def tente_novamente(inicio):
         #Se o usuário escolher a opção 1, então o mandamos de volta para o menu inicial
         if opcaoConvert == 1:
 
+            from MenuPrincipal import menu_Principal
             menu_Principal('iniciar')
 
         #Se o usuário escolher a opção 2, então encerramos o programa
@@ -104,6 +108,15 @@ def matricular_calouros(inicio):
         matriculaValida = checkMatriculaExiste(matricula)
 
     curso = "Ciência da Computação"
+
+    # Aqui estamos acessando a planilha
+    wb = load_workbook('dados_dos_alunos.xlsx')
+    # Aqui estamos acessando a página da planilha
+    ws = wb['Página1']
+    # Aqui estamos adicionando os dados dos calouros na planilha e salvando o arquivo
+    to_append = [nome_aluno, cpf_aluno, matricula, 1, 'Padrão', 'COMP359, COMP360, COMP361, COMP362, COMP363', 0]
+    ws.append(to_append)
+    wb.save('dados_dos_alunos.xlsx')
 
     print("Matrícula efetuada com sucesso!\n")
 
