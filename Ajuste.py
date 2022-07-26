@@ -92,14 +92,33 @@ def ajustar(inicio):
                 print('Houve um na hora de persistir os dados')    
 
         elif (escolha == 2):
-            print("As matérias que vc já pagou:")
             materiasPagas = resgatarMateriasPagas(matriculaValida[1])
-            print(materiasPagas)
             rows = []
             disponiveis = resgatarMateriasPossiveisAjuste(materiasPagas)
 
             rows = [x.values() for x in disponiveis]
-            print(tabulate(rows, headers=["Código", "Nome", "Carga Horária", "Dias", "Horário"]))
+            
+            newRows = []
+
+            for element in rows:
+                newRows.append(list(element))
+
+            for i in range(0, len(newRows)):
+                newRows[i].append(f"[{i+1}]")
+
+            print(tabulate(newRows))
+
+            print("Preencha aqui com os códigos das matérias nas quais você quer se inscrever da seguinte maneira:")
+            print("Ex: COMP401")
+            print("Ex: COMP401, COMP382")
+            print("Sempre que houver mais de uma disciplina, separar por vírgulas:")
+
+            disciplinasInscrever = str(input("> "))
+
+            disciplinasInscrever = disciplinasInscrever.split(",")
+            
+            
+            
 
             
 
