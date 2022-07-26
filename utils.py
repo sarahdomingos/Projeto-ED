@@ -64,7 +64,7 @@ def adicionarDisciplinas(disciplinas, index):
     page['H'][index].value = ', '.join(disciplinas)
 
     try: 
-        wb.save("dados_dos_alunos.xlsx")
+        # wb.save("dados_dos_alunos.xlsx")
         return True 
     except:
         return False 
@@ -148,7 +148,7 @@ def checarMateriaTemVagas(codigoDisciplina):
                     temVagas = True
                     page['G'][i].value = int(page['G'][i].value) - 1
                 break
-    wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
+    # wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
 
     return temVagas
 

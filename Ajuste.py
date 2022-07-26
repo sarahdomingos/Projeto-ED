@@ -2,6 +2,8 @@
 from utils import adicionarDisciplinas, checarMateriaTemVagas, checkMatriculaExiste, resgatarDisciplinasAtivas, resgatarDadosDisciplinas, removerDisciplina, resgatarMateriasPagas, resgatarMateriasPossiveisAjuste
 from tabulate import tabulate 
 
+operacoes = []
+
 def ajustar(inicio):
 
     matriculaValida = [False, 0] 
@@ -44,6 +46,7 @@ def ajustar(inicio):
             disciplinas[i] = resgatarDadosDisciplinas(disciplinas[i])
 
         rows = [x.values() for x in disciplinas]
+        disciplinasAtuais = rows
 
         print(f'Aluno: {matriculaValida[2]}')
         print(f'Número de matrícula: {matricula}\n')
@@ -104,13 +107,14 @@ def ajustar(inicio):
 
             materiaExcluida = newRows[disc-1]
 
+            operacoes.append([matricula, matriculaValida[1], ['R', materiaExcluida[0]]])
 
-            res = removerDisciplina(materiaExcluida[0], matriculaValida[1])
+            # res = removerDisciplina(materiaExcluida[0], matriculaValida[1])
         
-            if (res == True ):
-                print(f'Você não está mais inscrito na disciplina {materiaExcluida[0]} - {materiaExcluida[1]}')
-            else:
-                print('Houve um na hora de persistir os dados')    
+            # if (res == True):
+            #     print(f'Você não está mais inscrito na disciplina {materiaExcluida[0]} - {materiaExcluida[1]}')
+            # else:
+            #     print('Houve um na hora de persistir os dados')    
 
         elif (escolha == 2):
             materiasPagas = resgatarMateriasPagas(matriculaValida[1])
@@ -119,7 +123,8 @@ def ajustar(inicio):
             disponiveis = resgatarMateriasPossiveisAjuste(materiasPagas, materiasSolicitadas)
 
             rows = [x.values() for x in disponiveis]
-            
+            disciplinasDisponíveis = rows
+
             newRows = []
 
             for element in rows:
@@ -130,64 +135,80 @@ def ajustar(inicio):
 
             print(tabulate(newRows))
 
-            print("Preencha aqui com os códigos das matérias nas quais você quer se inscrever da seguinte maneira:")
-            print("Ex: COMP401")
-            print("Ex: COMP401, COMP382")
-            print("Sempre que houver mais de uma disciplina, separar por vírgulas:")
-
+            print("Preencha aqui com o código da matéria na qual você deseja se inscrever:")
             disciplinasInscrever = str(input("> "))
-
-            disciplinasInscrever = disciplinasInscrever.split(", ")
-
-            for i in range(0, len(disciplinasInscrever)):
-                if (not checarMateriaTemVagas(disciplinasInscrever[i])):
-                    disciplinasInscrever.pop(i)
-                    print(f'Não foi possível te matricular em {i}')
             
-            for i in disciplinasInscrever:
-                materiasSolicitadas.append(i)
+            # disciplinasInscrever = [disciplinasInscrever]
+            # for i in range(0, len(disciplinasInscrever)):
+            #     if (not checarMateriaTemVagas(disciplinasInscrever[i])):
+            #         disciplinasInscrever.pop(i)
+            #         print(f'Não foi possível te matricular em {i}')
             
-            res = adicionarDisciplinas(materiasSolicitadas, matriculaValida[1])
-            if (res):
-                print("Ajuste feito.")
-            else:
-                print("Houve um erro na persistência dos dados.")  
+            # for i in disciplinasInscrever:
+            #     materiasSolicitadas.append(i)
+            
+            operacoes.append([matricula, matriculaValida[1], ['I', disciplinasInscrever]])
+            # res = adicionarDisciplinas(materiasSolicitadas, matriculaValida[1])
+            # if (res):
+            #     print("Ajuste feito.")
+            # else:
+            #     print("Houve um erro na persistência dos dados.")  
 
         elif (escolha == 3):
-            print("Aqui estão as matérias ")
-            print(tabulate(rows))
-
-
-ajustar('iniciar')
+            print("Aqui estão as matérias nas quais você desejou se matricular:")
+            print(tabulate(disciplinasAtuais))
+            print("Aqui estão as matérias pelas quais você pode trocar:")
             
+            materiasPagas = resgatarMateriasPagas(matriculaValida[1])
+            materiasSolicitadas = resgatarDisciplinasAtivas(matriculaValida[1])
+            materiasPossiveis = resgatarMateriasPossiveisAjuste(materiasPagas, materiasSolicitadas)
+            print(tabulate(materiasPossiveis))
 
+            print("Primeiramente, digite a matéria que deseja remover:")
+            materiaRemover = input("> ")
             
+            for i in range(0, len(disciplinasAtuais)):
+                disciplinasAtuais[i] = list(disciplinasAtuais[i])
+                disciplinasAtuais[i] = disciplinasAtuais[i][0]
+            
+            for i in range(0, len(materiasPossiveis)):
+                materiasPossiveis[i] = materiasPossiveis[i]['codigo']
+          
+            remover = []
+            adicionar = []
+
+            if (materiaRemover in disciplinasAtuais):
+                remover = materiaRemover
+
+
+            print("Agora digite o código da matéria que você deseja inserir:")
+            materiaInserir = input("> ")
+
+            if (materiaInserir in materiasPossiveis):
+                adicionar = materiaInserir
+
+
+            operacoes.append([matricula, matriculaValida[1], ['T', adicionar, remover]])
+
+
+
+while True:
+    ajustar('iniciar')
+    desejaParar = input("Deseja encerrar o programa e checar a fila? S para sim, N para não.")
+    if (desejaParar == 'S'):
+        break
+    elif (desejaParar == 'F'):
+        continue
+
+# Essa parte aqui vai fazer as operações de acordo com a ordem
 
 
 
 
 
-        
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
