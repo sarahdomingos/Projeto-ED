@@ -239,6 +239,115 @@ def resgatarMateriasPossiveisReajuste(materiasPagas):
 
     return disciplinas
 
+def dadosAluno(matricula):
+
+    file = os.getcwd() + '\dados_dos_alunos.xlsx'
+    wb = load_workbook(file)
+    pagina = wb['Página1']
+
+    aluno = []
+
+    for row in pagina.values:
+        for value in row:
+            if (value == matricula):
+                aluno = list(row) 
+                break
+
+    return aluno
+
+def prioridadesMatricula(matricula):
+
+    aluno = dadosAluno(matricula)
+
+    if aluno[3] == 1:
+        prioridade = 1
+    elif aluno[4] == 'Padrão' and aluno[3] >= 8:
+        prioridade = 3
+    elif aluno[4] == 'Padrão':
+        prioridade = 0
+    elif aluno[4] == 'Individual':
+        prioridade = 2
+
+    return prioridade
+
+def confirmar(pedidos):
+
+    file2 = os.getcwd() + '\Disciplinas - Trabalho Estrutura de Dados.xlsx'
+    path_disciplinas = load_workbook(file2)
+
+    cc_obrig = path_disciplinas['Obrigatórias CC']
+    cc_elet = path_disciplinas['Eletivas CC']
+
+    listaFinal = {}
+
+    for i in sorted(pedidos, key=pedidos.get):
+        listaFinal[i] = pedidos[i]
+
+    for i in listaFinal:
+        aluno = dadosAluno(i)
+        discPedidas =  aluno[7].split(', ')
+        matricula = str(aluno[2])
+        for j in discPedidas:
+            k = 1
+            flag = 0
+
+            for row in cc_obrig.values:
+                for value in row:
+                    if (value == j):
+                        codigo = row
+                        flag = 1
+                        break
+            if (flag == 0):
+                for row in cc_elet.values:
+                    for value in row:
+                        if (value == j):
+                            codigo = row
+                            flag = 2
+                            break
+
+            disciplina = list(codigo)
+            if flag == 1:
+                vaga = int(disciplina[7])
+            if flag == 2:
+                vaga1 = int(disciplina[6])
+
+            if vaga > 0 and flag == 1:
+                for row in cc_obrig.values:
+                    for value in row:
+                        if (value == j):
+                            cc_obrig.cell(row=k, column=8).value = vaga - 1
+                            turma = cc_obrig.cell(row=k, column=9).value
+                            if turma == 'Vazia':
+                                cc_obrig.cell(row=k, column=9).value = matricula
+                            else:
+                                pessoas = turma.split(', ')
+                                pessoas.append(matricula)
+                                turmaFinal = ', '.join(pessoas)
+                                cc_obrig.cell(row=k, column=9).value = turmaFinal
+                            break
+                    k = k + 1
+            elif vaga1 > 0 and flag == 2:
+                for row in cc_elet.values:
+                    for value in row:
+                        if (value == j):
+                            cc_elet.cell(row=k, column=7).value = vaga1 - 1
+                            turma = cc_elet.cell(row=k, column=8).value
+                            if turma == 'Vazia':
+                                cc_elet.cell(row=k, column=8).value = matricula
+                            else:
+                                pessoas = turma.split(', ')
+                                pessoas.append(matricula)
+                                turmaFinal = ', '.join(pessoas)
+                                cc_elet.cell(row=k, column=8).value = turmaFinal
+                            break
+                    k = k + 1
+            else: 
+                print(f'As vagas para {disciplina[1]} já foram preenchidas!')
+
+    path_disciplinas.save('Disciplinas - Trabalho Estrutura de Dados.xlsx')
+
+    return listaFinal 
+
 
 
 

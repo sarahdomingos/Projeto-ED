@@ -114,7 +114,7 @@ def matricular_calouros(inicio):
     # Aqui estamos acessando a página da planilha
     ws = wb['Página1']
     # Aqui estamos adicionando os dados dos calouros na planilha e salvando o arquivo
-    to_append = [nome_aluno, cpf_aluno, matricula, 1, 'Padrão', 'COMP359, COMP360, COMP361, COMP362, COMP363', 0]
+    to_append = [nome_aluno, cpf_aluno, matricula, 1, 'Padrão', 'COMP359, COMP360, COMP361, COMP362, COMP363', 0, 'COMP359, COMP360, COMP361, COMP362, COMP363']
     ws.append(to_append)
     wb.save('dados_dos_alunos.xlsx')
 
@@ -144,10 +144,7 @@ def matricular_calouros(inicio):
 
     print("Carga horária total: 360 horas")
 
+    return matricula
 
-
-def matricular_veteranos(inicio):
-
-    print("Não sei o que fazer")
 
 

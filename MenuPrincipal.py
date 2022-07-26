@@ -1,4 +1,4 @@
-
+from utils import prioridadesMatricula, confirmar
 # from Ajuste import ajustar
 # from Reajuste import reajustar
 
@@ -58,49 +58,69 @@ def tente_novamente(inicio):
 
         tente_novamente('iniciar')
 
-
+pedidosMatricula = {21117369: 0, 21115821: 0, 19113291: 3, 21117122: 2}
 # Esta função representa o menu inicial exibido para o usuário
 def menu_Principal(inicio):
-    print("############################################################\n")
-    print("                 Menu do Sistema do Estudante\n")
-    print("As opções disponíveis são:\n")
-    print("1 - Fazer matrícula (apenas para calouros)")
-    print("2 - Fazer matrícula (veteranos)")
-    print("3 - Ajuste")
-    print("4 - Reajuste\n")
+    while True:
+        print("############################################################\n")
+        print("                 Menu do Sistema do Estudante\n")
+        print("As opções disponíveis são:\n")
+        print("1 - Fazer matrícula (apenas para calouros)")
+        print("2 - Fazer matrícula (veteranos)")
+        print("3 - Ajuste")
+        print("4 - Reajuste\n")
 
-    opcao = input("Digite o número correspondente a sua escolha: ")
+        print("############################################################\n")
+        print("                 Menu do Sistema do Coordenador\n")
+        print("As opções disponíveis são:\n")
+        print("10 - Finalizar período de MATRÍCULA")
+        print("20 - Finalizar período de AJUSTE")
+        print("30 - Finalizar período de REAJUSTE\n")
 
-    # Aqui estamos verificando se a entrada dada pelo usuário é um número inteiro
-    try:
-        int(opcao)
-        verificacao_numero_inteiro = True
+        opcao = input("Digite o número correspondente a sua escolha: ")
 
-    except ValueError:
-        verificacao_numero_inteiro = False
+        # Aqui estamos verificando se a entrada dada pelo usuário é um número inteiro
+        try:
+            int(opcao)
+            verificacao_numero_inteiro = True
 
-    # Se a entrada não é um número inteiro, então chamamos a função de erro
-    if verificacao_numero_inteiro == False:
-        print("Entrada Inválida!")
-        print("Você só pode digitar números inteiros enre 1 e 3.\n")
-        tente_novamente("iniciar")
+        except ValueError:
+            verificacao_numero_inteiro = False
 
-    # Se a entrada for um número inteiro, então...
-    if verificacao_numero_inteiro == True:
+        # Se a entrada não é um número inteiro, então chamamos a função de erro
+        if verificacao_numero_inteiro == False:
+            print("Entrada Inválida!")
+            print("Você só pode digitar números inteiros enre 1 e 3.\n")
+            tente_novamente("iniciar")
 
-        # Transformamos a entrada que está no formato de escrita em numeral
-        opcaoConvert = int(opcao)
+        # Se a entrada for um número inteiro, então...
+        if verificacao_numero_inteiro == True:
 
-        if opcaoConvert == 1:
-            import Matricula
-            Matricula.matricular_calouros("iniciar")
-        
-        if opcaoConvert == 3:
-            import Ajuste
-            Ajuste.ajustar("iniciar")
+            # Transformamos a entrada que está no formato de escrita em numeral
+            opcaoConvert = int(opcao)
 
-        if opcaoConvert == 4:
-            import Reajuste
-            Reajuste.reajustar("iniciar")
+            if opcaoConvert == 1:
+                import Matricula
+                matricula = Matricula.matricular_calouros("iniciar")
+                prioridade = prioridadesMatricula(matricula)
+                pedidosMatricula[matricula] = prioridade
+
+            if opcaoConvert == 2:
+                from Matricula_veterano import inicio   
+                matricula = inicio()
+                prioridade = prioridadesMatricula(matricula)
+                pedidosMatricula[matricula] = prioridade
+            
+            if opcaoConvert == 3:
+                import Ajuste
+                Ajuste.ajustar("iniciar")
+
+            if opcaoConvert == 4:
+                import Reajuste
+                Reajuste.reajustar("iniciar")
+            
+            if opcaoConvert == 10:
+                listaOrdenada = confirmar(pedidosMatricula)
+                print(f'\nLista final com a ordem de prioridade dos lunos:\n{listaOrdenada}\n')
         
 menu_Principal('iniciar')
