@@ -18,8 +18,28 @@ def ajustar(inicio):
 
     if (len(disciplinas) == 0):
         disciplinas = print('O aluno não está matriculado em nenhuma matéria no momento.')
+
+        materiasPagas = resgatarMateriasPagas(matriculaValida[1])
+        print(materiasPagas)
+        disponiveis = resgatarMateriasPossiveisAjuste(materiasPagas)
+
+        rows = [x.values() for x in disponiveis]
+            
+        newRows = []
+
+        for element in rows:
+            newRows.append(list(element))
+
+        for i in range(0, len(newRows)):
+            newRows[i].append(f"[{i+1}]")
+
+        print(tabulate(newRows))
+
+
+
+
+    # Caso o aluno esteja matriculado em alguma disciplina
     else:
-        
         for i in range(0, len(disciplinas)):
             disciplinas[i] = resgatarDadosDisciplinas(disciplinas[i])
 
@@ -93,8 +113,9 @@ def ajustar(inicio):
 
         elif (escolha == 2):
             materiasPagas = resgatarMateriasPagas(matriculaValida[1])
+            materiasSolicitadas = resgatarDisciplinasAtivas(matriculaValida[1])
             rows = []
-            disponiveis = resgatarMateriasPossiveisAjuste(materiasPagas)
+            disponiveis = resgatarMateriasPossiveisAjuste(materiasPagas, materiasSolicitadas)
 
             rows = [x.values() for x in disponiveis]
             

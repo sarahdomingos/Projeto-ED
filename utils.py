@@ -115,7 +115,7 @@ def resgatarMateriasPagas(index):
     return materias
 
 
-def resgatarMateriasPossiveisAjuste(materiasPagas): 
+def resgatarMateriasPossiveisAjuste(materiasPagas, materiasSolicitadas): 
     
     file = os.getcwd() + '\Disciplinas - Trabalho Estrutura de Dados.xlsx'
     wb = load_workbook(file)
@@ -136,8 +136,7 @@ def resgatarMateriasPossiveisAjuste(materiasPagas):
     eletivas_possiveis = []
 
     for i in range(1, len(page['A'])):
-        if (page['A'][i].value != None) and page['A'][i].value not in materiasPagas:
-
+        if (page['A'][i].value != None) and page['A'][i].value not in materiasPagas and page['A'][i].value not in materiasSolicitadas:
             #split pre requisitos 
             prerequisitos = str(page['C'][i].value)
             prerequisitos = prerequisitos.split(",")
@@ -149,7 +148,7 @@ def resgatarMateriasPossiveisAjuste(materiasPagas):
 
     page = wb["Eletivas CC"]
     for i in range(1, len(page['A'])):
-        if (page['A'][i].value != None) and page['A'][i].value not in materiasPagas:
+        if (page['A'][i].value != None) and page['A'][i].value not in materiasPagas and page['A'][i].value not in materiasSolicitadas:
 
             #split pre requisitos 
             prerequisitos = str(page['C'][i].value)
@@ -161,24 +160,18 @@ def resgatarMateriasPossiveisAjuste(materiasPagas):
                 eletivas_possiveis.append([page['A'][i].value, prerequisitos])
     # 19218721
 
-
-    # print(obrigatorias_possiveis)
-    # print("Eletivas possíveis")
-    # print(eletivas_possiveis)
-
     for i in obrigatorias_possiveis:
         possivel = True 
         for valor in i[1]:
-            if (valor not in materiasPagas):
+            if (valor not in materiasPagas and valor not in materiasSolicitadas):
                 possivel = False
-        
         if (possivel):
             materiasDisponiveis.append(i[0])
 
     for i in eletivas_possiveis:
         possivel = True 
         for valor in i[1]:
-            if (valor not in materiasPagas):
+            if (valor not in materiasPagas and valor not in materiasSolicitadas):
                 possivel = False
         
         if (possivel):
@@ -187,7 +180,6 @@ def resgatarMateriasPossiveisAjuste(materiasPagas):
 
     for i in range(0, len(materiasDisponiveis)):
         materiasDisponiveis[i] = resgatarDadosDisciplinas(materiasDisponiveis[i])
-        # print(materiasDisponiveis[i])
 
     return materiasDisponiveis
 
