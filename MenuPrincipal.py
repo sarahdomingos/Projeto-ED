@@ -95,6 +95,11 @@ def menu_Principal(inicio):
             import Matricula
             Matricula.matricular_calouros("iniciar")
 
+        if opcaoConvert == 4:
+            import Reajuste
+            Reajuste.reajustar("iniciar")
+        
+
 
 
 menu_Principal('iniciar')

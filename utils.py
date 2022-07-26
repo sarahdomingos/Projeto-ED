@@ -7,7 +7,7 @@ def checkMatriculaExiste(numero):
     numeroExiste = False
     nome = None
     
-    file = os.getcwd() + '\dados_dos_alunos.xlsx'
+    file = os.getcwd() + '/dados_dos_alunos.xlsx'
     wb = load_workbook(file)
     page = wb['Página1']
 
@@ -24,7 +24,7 @@ def checkMatriculaExiste(numero):
 
 def resgatarDisciplinasAtivas(index):
 
-    file = os.getcwd() + '\dados_dos_alunos.xlsx'
+    file = os.getcwd() + '/dados_dos_alunos.xlsx'
     wb = load_workbook(file)
     page = wb['Página1']
 
@@ -38,7 +38,7 @@ def resgatarDisciplinasAtivas(index):
     return materias
 
 def removerDisciplina(codigoDisciplina, index):
-    file = os.getcwd() + '\dados_dos_alunos.xlsx'
+    file = os.getcwd() + '/dados_dos_alunos.xlsx'
     wb = load_workbook(file)
     page = wb["Página1"]
 
@@ -64,7 +64,7 @@ def removerDisciplina(codigoDisciplina, index):
 
 def resgatarDadosDisciplinas(codigo):
 
-    file = os.getcwd() + '\Disciplinas - Trabalho Estrutura de Dados.xlsx'
+    file = os.getcwd() + '/Disciplinas - Trabalho Estrutura de Dados.xlsx'
     wb = load_workbook(file)
     page = wb['Obrigatórias CC']    
 
@@ -101,7 +101,7 @@ def resgatarDadosDisciplinas(codigo):
     return disciplina
 
 def resgatarMateriasPagas(index):
-    file = os.getcwd() + '\dados_dos_alunos.xlsx'
+    file = os.getcwd() + '/dados_dos_alunos.xlsx'
     wb = load_workbook(file)
     page = wb['Página1']
 
@@ -117,7 +117,7 @@ def resgatarMateriasPagas(index):
 
 def resgatarMateriasPossiveisAjuste(materiasPagas): 
     
-    file = os.getcwd() + '\Disciplinas - Trabalho Estrutura de Dados.xlsx'
+    file = os.getcwd() + '/Disciplinas - Trabalho Estrutura de Dados.xlsx'
     wb = load_workbook(file)
 
     disciplinas = []
@@ -188,6 +188,63 @@ def resgatarMateriasPossiveisAjuste(materiasPagas):
                     })
 
     return disciplinas
+
+def resgatarMateriasPossiveisReajuste(materiasPagas): 
+    
+    file = os.getcwd() + '/Disciplinas - Trabalho Estrutura de Dados.xlsx'
+    wb = load_workbook(file)
+
+    disciplinas = []
+
+    page = wb["Obrigatórias EC"]
+    for index in range(1, len(page['A'])):
+        # checa se a disciplina tem pre-requisitos
+        if (page['C'][index].value == 0):
+            disciplinas.append({
+                "codigo": page['A'][index].value,
+                "nome": page['B'][index].value,
+                "carga horária": page['D'][index].value,
+                "dias": page['E'][index].value,
+                "horarios": page['F'][index].value
+            })
+
+    page = wb["Eletivas EC"]
+    for index in range(1, len(page['A'])):
+        if (page['C'][index].value == 0):
+            disciplinas.append({
+                "codigo": page['A'][index].value,
+                "nome": page['B'][index].value,
+                "carga horária": page['D'][index].value,
+                "dias": page['E'][index].value,
+                "horarios": page['F'][index].value
+            })
+
+    page = wb["IM"]
+    for index in range(1, len(page['A'])):
+        if (page['C'][index].value == 0):
+            disciplinas.append({
+                "codigo": page['A'][index].value,
+                "nome": page['B'][index].value,
+                "carga horária": page['D'][index].value,
+                "dias": page['E'][index].value,
+                "horarios": page['F'][index].value
+            })
+
+    page = wb["IF"]
+    for index in range(1, len(page['A'])):
+        if (page['C'][index].value == 0):
+            disciplinas.append({
+                "codigo": page['A'][index].value,
+                "nome": page['B'][index].value,
+                "carga horária": page['D'][index].value,
+                "dias": page['E'][index].value,
+                "horarios": page['F'][index].value
+            })
+
+    return disciplinas
+
+    
+
     #     else:
     #         # recupera os pre-requisitos da matéria
 
