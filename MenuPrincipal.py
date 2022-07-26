@@ -99,7 +99,4 @@ def menu_Principal(inicio):
             import Reajuste
             Reajuste.reajustar("iniciar")
         
-
-
-
 menu_Principal('iniciar')

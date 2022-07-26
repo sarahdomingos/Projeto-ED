@@ -148,40 +148,53 @@ def resgatarMateriasPossiveisAjuste(materiasPagas):
                 obrigatorias_possiveis.append([page['A'][i].value, prerequisitos])
 
     page = wb["Eletivas CC"]
-<<<<<<< HEAD
-    for index in range(1, len(page['A'])):
-        if (page['C'][index].value == 0):
-            disciplinas.append({
-                "codigo": page['A'][index].value,
-                "nome": page['B'][index].value,
-                "carga horária": page['D'][index].value,
-                "dias": page['E'][index].value,
-                "horarios": page['F'][index].value
-            })
-        else:
-            if (page['C'][index].value != None):
-                prereq = page['C'][index].value
-                prereq = prereq.split(",")
-                
-                possivelPagar = True
+    for i in range(1, len(page['A'])):
+        if (page['A'][i].value != None) and page['A'][i].value not in materiasPagas:
 
-                for prerequisito in prereq:
-                    if (prerequisito not in materiasPagas):
-                        possivelPagar = False 
-                
-                if (possivelPagar == True and page['A'][index].value not in materiasPagas):
-                    disciplinas.append({
-                        "codigo": page['A'][index].value,
-                        "nome": page['B'][index].value,
-                        "carga horária": page['D'][index].value,
-                        "dias": page['E'][index].value,
-                        "horarios": page['F'][index].value
-                    })
+            #split pre requisitos 
+            prerequisitos = str(page['C'][i].value)
+            prerequisitos = prerequisitos.split(",")
 
-    return disciplinas
+            if (page['C'][i].value == 'TODAS AS DISCIPLINAS OBRIGATÓRIAS DO 1º AO 5º PERÍODO'):
+                eletivas_possiveis.append([page['A'][i].value, obrigatorias_primeiro_quinto])
+            else:
+                eletivas_possiveis.append([page['A'][i].value, prerequisitos])
+    
+    
+    # 19218721
+
+
+    # print(obrigatorias_possiveis)
+    # print("Eletivas possíveis")
+    # print(eletivas_possiveis)
+
+    for i in obrigatorias_possiveis:
+        possivel = True 
+        for valor in i[1]:
+            if (valor not in materiasPagas):
+                possivel = False
+        
+        if (possivel):
+            materiasDisponiveis.append(i[0])
+
+    for i in eletivas_possiveis:
+        possivel = True 
+        for valor in i[1]:
+            if (valor not in materiasPagas):
+                possivel = False
+        
+        if (possivel):
+            materiasDisponiveis.append(i[0])
+        
+
+    for i in range(0, len(materiasDisponiveis)):
+        materiasDisponiveis[i] = resgatarDadosDisciplinas(materiasDisponiveis[i])
+        # print(materiasDisponiveis[i])
+
+    return materiasDisponiveis
 
 def resgatarMateriasPossiveisReajuste(materiasPagas): 
-    
+
     file = os.getcwd() + '/Disciplinas - Trabalho Estrutura de Dados.xlsx'
     wb = load_workbook(file)
 
@@ -233,100 +246,6 @@ def resgatarMateriasPossiveisReajuste(materiasPagas):
             })
 
     return disciplinas
-
-    
-
-    #     else:
-    #         # recupera os pre-requisitos da matéria
-
-    #         prereq = page['C'][index].value
-    #         print(prereq)
-    #         prereq = prereq.split(", ")
-
-    #         # checa 
-
-    #         for prerequisito in prereq:
-    #             if (prerequisito in materiasPagas):
-    #                 disciplinas.append({
-    #                     "codigo": page['A'][index].value,
-    #                     "nome": page['B'][index].value,
-    #                     "carga horária": page['D'][index].value,
-    #                     "dias": page['E'][index].value,
-    #                     "horarios": page['F'][index].value
-    #                 })
-
-    # page = wb["Eletivas CC"]
-    # for index in range(1, len(page['A'])):
-    #     # checa se a disciplina tem pre-requisitos
-    #     if (page['C'][index].value == 0):
-    #         disciplinas.append({
-    #             "codigo": page['A'][index].value,
-    #             "nome": page['B'][index].value,
-    #             "carga horária": page['D'][index].value,
-    #             "dias": page['E'][index].value,
-    #             "horarios": page['F'][index].value
-    #         })
-    #     else:
-    #         # recupera os pre-requisitos da matéria
-
-    #         prereq = page['C'][index].value
-    #         prereq = prereq.split(", ")
-
-    #         # checa 
-
-    #         for prerequisito in prereq:
-    #             if (prerequisito in materiasPagas):
-    #                 disciplinas.append({
-    #                     "codigo": page['A'][index].value,
-    #                     "nome": page['B'][index].value,
-    #                     "carga horária": page['D'][index].value,
-    #                     "dias": page['E'][index].value,
-    #                     "horarios": page['F'][index].value
-    #                 })
-=======
-    for i in range(1, len(page['A'])):
-        if (page['A'][i].value != None) and page['A'][i].value not in materiasPagas:
->>>>>>> 6ce8a09799a08adc544795dfbe29bec7f627fa7c
-
-            #split pre requisitos 
-            prerequisitos = str(page['C'][i].value)
-            prerequisitos = prerequisitos.split(",")
-
-            if (page['C'][i].value == 'TODAS AS DISCIPLINAS OBRIGATÓRIAS DO 1º AO 5º PERÍODO'):
-                eletivas_possiveis.append([page['A'][i].value, obrigatorias_primeiro_quinto])
-            else:
-                eletivas_possiveis.append([page['A'][i].value, prerequisitos])
-    # 19218721
-
-
-    # print(obrigatorias_possiveis)
-    # print("Eletivas possíveis")
-    # print(eletivas_possiveis)
-
-    for i in obrigatorias_possiveis:
-        possivel = True 
-        for valor in i[1]:
-            if (valor not in materiasPagas):
-                possivel = False
-        
-        if (possivel):
-            materiasDisponiveis.append(i[0])
-
-    for i in eletivas_possiveis:
-        possivel = True 
-        for valor in i[1]:
-            if (valor not in materiasPagas):
-                possivel = False
-        
-        if (possivel):
-            materiasDisponiveis.append(i[0])
-        
-
-    for i in range(0, len(materiasDisponiveis)):
-        materiasDisponiveis[i] = resgatarDadosDisciplinas(materiasDisponiveis[i])
-        # print(materiasDisponiveis[i])
-
-    return materiasDisponiveis
 
 
 
