@@ -56,6 +56,13 @@ def removerDisciplina(codigoDisciplina, index):
 
     page['H'][index].value = ', '.join(disciplinas)
 
+def adicionarDisciplinas(disciplinas, index):
+    file = os.getcwd() + '/dados_dos_alunos.xlsx'
+    wb = load_workbook(file)
+    page = wb["Página1"]
+    
+    page['H'][index].value = ', '.join(disciplinas)
+
     try: 
         wb.save("dados_dos_alunos.xlsx")
         return True 
@@ -113,6 +120,37 @@ def resgatarMateriasPagas(index):
         materias = []
 
     return materias
+
+def checarMateriaTemVagas(codigoDisciplina):
+    file = os.getcwd() + '/Disciplinas - Trabalho Estrutura de Dados.xlsx'
+    wb = load_workbook(file)
+    found = False 
+    temVagas = False
+
+    page = wb["Obrigatórias CC"]
+
+    for i in range(1, len(page['A'])):
+        if (page['A'][i].value == codigoDisciplina):
+            found = True
+            print(page['H'][i].value)
+            if (int(page['H'][i].value) > 0):
+                temVagas = True
+                page['G'][i].value = int(page['G'][i].value) - 1
+            break
+    
+    if (not found):
+        page = wb["Eletivas CC"]
+
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisciplina):
+                found = True
+                if (int(page['G'][i].value) > 0):
+                    temVagas = True
+                    page['G'][i].value = int(page['G'][i].value) - 1
+                break
+    wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
+
+    return temVagas
 
 
 def resgatarMateriasPossiveisAjuste(materiasPagas, materiasSolicitadas): 

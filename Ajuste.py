@@ -1,5 +1,5 @@
 # from MenuPrincipal import tente_novamente
-from utils import checkMatriculaExiste, resgatarDisciplinasAtivas, resgatarDadosDisciplinas, removerDisciplina, resgatarMateriasPagas, resgatarMateriasPossiveisAjuste
+from utils import adicionarDisciplinas, checarMateriaTemVagas, checkMatriculaExiste, resgatarDisciplinasAtivas, resgatarDadosDisciplinas, removerDisciplina, resgatarMateriasPagas, resgatarMateriasPossiveisAjuste
 from tabulate import tabulate 
 
 def ajustar(inicio):
@@ -53,7 +53,8 @@ def ajustar(inicio):
         
         print("Você deseja:\n")
         print("1 - Sair de uma das disciplinas")            
-        print("2 - Se inscrever em uma disciplina diferente\n")   
+        print("2 - Se inscrever em uma disciplina diferente")   
+        print("3 - Trocar uma disciplina por outra\n")
 
             
         escolha = input("Digite o número correspondente a sua escolha: ")
@@ -63,7 +64,7 @@ def ajustar(inicio):
         while (not valid):
             try:
                 escolha = int(escolha)
-                if (escolha == 1 or escolha == 2):
+                if (escolha == 1 or escolha == 2 or escolha == 3):
                     valid = True
                 else:
                     print("Entrada inválida. Você só pode escolher entre 1 ou 2.")
@@ -136,9 +137,28 @@ def ajustar(inicio):
 
             disciplinasInscrever = str(input("> "))
 
-            disciplinasInscrever = disciplinasInscrever.split(",")
+            disciplinasInscrever = disciplinasInscrever.split(", ")
+
+            for i in range(0, len(disciplinasInscrever)):
+                if (not checarMateriaTemVagas(disciplinasInscrever[i])):
+                    disciplinasInscrever.pop(i)
+                    print(f'Não foi possível te matricular em {i}')
             
+            for i in disciplinasInscrever:
+                materiasSolicitadas.append(i)
             
+            res = adicionarDisciplinas(materiasSolicitadas, matriculaValida[1])
+            if (res):
+                print("Ajuste feito.")
+            else:
+                print("Houve um erro na persistência dos dados.")  
+
+        elif (escolha == 3):
+            print("Aqui estão as matérias ")
+            print(tabulate(rows))
+
+
+ajustar('iniciar')
             
 
             
