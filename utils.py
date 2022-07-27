@@ -50,6 +50,44 @@ def diminuirUmaVaga(codigoDisiciplina):
     
     wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
 
+    page = wb["Obrigatórias EC"]
+    if (not found):
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisiciplina):
+                if (int(page['G'][i].value) > 0): 
+                    page['G'][i].value = int(page['G'][i].value) - 1
+                found = True 
+                break
+
+    page = wb["Eletivas EC"]
+    if (not found):
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisiciplina):
+                if (int(page['G'][i].value) > 0): 
+                    page['G'][i].value = int(page['G'][i].value) - 1
+                found = True 
+                break
+    
+    page = wb["IF"]
+    if (not found):
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisiciplina):
+                if (int(page['G'][i].value) > 0): 
+                    page['G'][i].value = int(page['G'][i].value) - 1
+                found = True 
+                break
+    
+    page = wb["IM"]
+    if (not found):
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisiciplina):
+                if (int(page['G'][i].value) > 0): 
+                    page['G'][i].value = int(page['G'][i].value) - 1
+                found = True 
+                break
+    
+    wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
+
 def aumentarUmVaga(codigoDisiciplina):
     file = os.getcwd() + '/Disciplinas - Trabalho Estrutura de Dados.xlsx'
     wb = load_workbook(file)
@@ -76,6 +114,50 @@ def aumentarUmVaga(codigoDisiciplina):
                 found = True 
                 break
     
+    wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
+
+    page = wb["Obrigatórias EC"]
+    if (not found):
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisiciplina):
+                if (int(page['G'][i].value) > 0): 
+                    page['G'][i].value = int(page['G'][i].value) + 1
+                found = True 
+                break
+
+    wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
+
+    page = wb["Eletivas EC"]
+    if (not found):
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisiciplina):
+                if (int(page['G'][i].value) > 0): 
+                    page['G'][i].value = int(page['G'][i].value) + 1
+                found = True 
+                break
+ 
+    wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
+
+    page = wb["IF"]
+    if (not found):
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisiciplina):
+                if (int(page['G'][i].value) > 0): 
+                    page['G'][i].value = int(page['G'][i].value) + 1
+                found = True 
+                break
+
+    wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
+
+    page = wb["IM"]
+    if (not found):
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisiciplina):
+                if (int(page['G'][i].value) > 0): 
+                    page['G'][i].value = int(page['G'][i].value) + 1
+                found = True 
+                break
+
     wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
 
 def checarMateriaTemVagas(codigoDisciplina):
@@ -106,7 +188,52 @@ def checarMateriaTemVagas(codigoDisciplina):
                 break
     # wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
 
+    if (not found):
+        page = wb["Eletivas EC"]
+
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisciplina):
+                found = True
+                if (int(page['G'][i].value) > 0):
+                    temVagas = True
+                    page['G'][i].value = int(page['G'][i].value) - 1
+                break
+
+    if (not found):
+        page = wb["Obrigatórias EC"]
+
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisciplina):
+                found = True
+                if (int(page['G'][i].value) > 0):
+                    temVagas = True
+                    page['G'][i].value = int(page['G'][i].value) - 1
+                break
+
+    if (not found):
+        page = wb["IM"]
+
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisciplina):
+                found = True
+                if (int(page['G'][i].value) > 0):
+                    temVagas = True
+                    page['G'][i].value = int(page['G'][i].value) - 1
+                break
+    if (not found):
+
+        page = wb["IF"]
+
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisciplina):
+                found = True
+                if (int(page['G'][i].value) > 0):
+                    temVagas = True
+                    page['G'][i].value = int(page['G'][i].value) - 1
+                break
+
     return temVagas
+
 
 def resgatarDisciplinasAtivas(index):
 
@@ -185,6 +312,62 @@ def resgatarDadosDisciplinas(codigo):
         
     if (not found):
         page = wb['Eletivas CC']
+
+        for index in range(1, len(page['A'])):
+            if (page['A'][index].value == codigo):
+                disciplina = {
+                    "codigo": page['A'][index].value,
+                    "nome": page['B'][index].value,
+                    "dias": page['E'][index].value, 
+                    "carga horária": page['D'][index].value,
+                    "horario": page['F'][index].value
+                }
+                break 
+
+    if (not found):
+        page = wb['Obrigatórias EC']
+
+        for index in range(1, len(page['A'])):
+            if (page['A'][index].value == codigo):
+                disciplina = {
+                    "codigo": page['A'][index].value,
+                    "nome": page['B'][index].value,
+                    "dias": page['E'][index].value, 
+                    "carga horária": page['D'][index].value,
+                    "horario": page['F'][index].value
+                }
+                break 
+
+    if (not found):
+        page = wb['Eletivas EC']
+
+        for index in range(1, len(page['A'])):
+            if (page['A'][index].value == codigo):
+                disciplina = {
+                    "codigo": page['A'][index].value,
+                    "nome": page['B'][index].value,
+                    "dias": page['E'][index].value, 
+                    "carga horária": page['D'][index].value,
+                    "horario": page['F'][index].value
+                }
+                break 
+
+    if (not found):
+        page = wb['IM']
+
+        for index in range(1, len(page['A'])):
+            if (page['A'][index].value == codigo):
+                disciplina = {
+                    "codigo": page['A'][index].value,
+                    "nome": page['B'][index].value,
+                    "dias": page['E'][index].value, 
+                    "carga horária": page['D'][index].value,
+                    "horario": page['F'][index].value
+                }
+                break 
+
+    if (not found):
+        page = wb['IF']
 
         for index in range(1, len(page['A'])):
             if (page['A'][index].value == codigo):
@@ -469,12 +652,3 @@ def sort(array, isSorted):
                 isSorted = False
 
     return sort(array, isSorted)
-
-
-
-
-
-
-
-
-
