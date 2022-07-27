@@ -22,6 +22,37 @@ def checkMatriculaExiste(numero):
 
     return [numeroExiste, index, page['A'][index].value]
 
+def checarMateriaTemVagas(codigoDisciplina):
+    file = os.getcwd() + '/Disciplinas - Trabalho Estrutura de Dados.xlsx'
+    wb = load_workbook(file)
+    found = False 
+    temVagas = False
+
+    page = wb["Obrigatórias CC"]
+
+    for i in range(1, len(page['A'])):
+        if (page['A'][i].value == codigoDisciplina):
+            found = True
+            print(page['H'][i].value)
+            if (int(page['H'][i].value) > 0):
+                temVagas = True
+                page['G'][i].value = int(page['G'][i].value) - 1
+            break
+    
+    if (not found):
+        page = wb["Eletivas CC"]
+
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisciplina):
+                found = True
+                if (int(page['G'][i].value) > 0):
+                    temVagas = True
+                    page['G'][i].value = int(page['G'][i].value) - 1
+                break
+    # wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
+
+    return temVagas
+
 def resgatarDisciplinasAtivas(index):
 
     file = os.getcwd() + '/dados_dos_alunos.xlsx'
@@ -121,36 +152,6 @@ def resgatarMateriasPagas(index):
 
     return materias
 
-def checarMateriaTemVagas(codigoDisciplina):
-    file = os.getcwd() + '/Disciplinas - Trabalho Estrutura de Dados.xlsx'
-    wb = load_workbook(file)
-    found = False 
-    temVagas = False
-
-    page = wb["Obrigatórias CC"]
-
-    for i in range(1, len(page['A'])):
-        if (page['A'][i].value == codigoDisciplina):
-            found = True
-            print(page['H'][i].value)
-            if (int(page['H'][i].value) > 0):
-                temVagas = True
-                page['G'][i].value = int(page['G'][i].value) - 1
-            break
-    
-    if (not found):
-        page = wb["Eletivas CC"]
-
-        for i in range(1, len(page['A'])):
-            if (page['A'][i].value == codigoDisciplina):
-                found = True
-                if (int(page['G'][i].value) > 0):
-                    temVagas = True
-                    page['G'][i].value = int(page['G'][i].value) - 1
-                break
-    # wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
-
-    return temVagas
 
 
 def resgatarMateriasPossiveisAjuste(materiasPagas, materiasSolicitadas): 
@@ -388,7 +389,25 @@ def confirmar(pedidos):
 
 
 
+def sort(array, isSorted):
+    
+    if (isSorted == True):
+        return array
 
+    for i in range(0, len(array)):
+        if (i+1 != len(array)):
+            if (array[i][-1]["prioridade"] > array[i+1][-1]["prioridade"]):
+                aux = array[i][-1]["prioridade"]
+                array[i][-1]["prioridade"] = array[i+1][-1]["prioridade"]
+                array[i+1][-1]["prioridade"] = aux
+    
+    isSorted = True 
+    for i in range(0, len(array)):
+        if (i+1 != len(array)):
+            if (array[i][-1]["prioridade"] > array[i+1][-1]["prioridade"]):
+                isSorted = False
+
+    return sort(array, isSorted)
 
 
 

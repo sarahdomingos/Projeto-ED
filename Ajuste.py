@@ -1,5 +1,5 @@
 # from MenuPrincipal import tente_novamente
-from utils import adicionarDisciplinas, checarMateriaTemVagas, checkMatriculaExiste, resgatarDisciplinasAtivas, resgatarDadosDisciplinas, removerDisciplina, resgatarMateriasPagas, resgatarMateriasPossiveisAjuste
+from utils import adicionarDisciplinas, checarMateriaTemVagas, checkMatriculaExiste, resgatarDisciplinasAtivas, resgatarDadosDisciplinas, removerDisciplina, resgatarMateriasPagas, resgatarMateriasPossiveisAjuste, sort
 from tabulate import tabulate 
 
 operacoes = []
@@ -201,9 +201,45 @@ while True:
         continue
 
 # Essa parte aqui vai fazer as operações de acordo com a ordem
+for i in operacoes:
+    operacao = i[2][0]
+    
+    if (operacao == 'R'):
+        materiaRemocao = i[2][1]
+        
+        for l in operacoes:
+            if (l != i):
+                if (l[2][0] == 'I'):
+                    print(l[2][1])
+                    if (l[2][1] == materiaRemocao):
+                        i.append({"prioridade": 2})
+                
+                elif (l[2][0] == 'T'):
+                    if (l[2][1] == materiaRemocao):
+                        i.append({"prioridade": 1})
+        i.append({"prioridade": 3})
+    elif (operacao == 'T'):
+        i.append({"prioridade": 4})
+    elif (operacao == 'I'):
+        i.append({"prioridade": 5})
 
+operacoes = sort(operacoes, False)
 
-
+for operacao in operacoes:
+    if (operacao[2][1] == 'R'):
+        materia = operacao[2][1]
+        indexMatricula = operacao[1]
+        removerDisciplina(materia, indexMatricula)
+    elif (operacao[2][1] == 'I'):
+        materia = operacao[2][1]
+        indexMatricula = operacao[1]
+        adicionarDisciplinas([materia], indexMatricula)
+    elif (operacao[2][1] == 'T'):
+        materiaInserir = operacao[2][1]
+        materiaRemover = operacao[2][2]
+        indexMatricula = operacao[1]
+        removerDisciplina(materiaRemover, indexMatricula)
+        adicionarDisciplinas([materiaInserir], indexMatricula)
 
 
 

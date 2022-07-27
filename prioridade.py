@@ -25,8 +25,26 @@ for i in op:
     elif (operacao == 'I'):
         i.append({"prioridade": 5})
     
-for i in op:
-    print(i)
+
+def sort(array, isSorted):
+    
+    if (isSorted == True):
+        return array
+
+    for i in range(0, len(array)):
+        if (i+1 != len(array)):
+            if (array[i][-1]["prioridade"] > array[i+1][-1]["prioridade"]):
+                aux = array[i][-1]["prioridade"]
+                array[i][-1]["prioridade"] = array[i+1][-1]["prioridade"]
+                array[i+1][-1]["prioridade"] = aux
+    
+    isSorted = True 
+    for i in range(0, len(array)):
+        if (i+1 != len(array)):
+            if (array[i][-1]["prioridade"] > array[i+1][-1]["prioridade"]):
+                isSorted = False
+
+    return sort(array, isSorted)
 
 
 
