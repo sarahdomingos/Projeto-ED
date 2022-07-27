@@ -228,18 +228,41 @@ operacoes = sort(operacoes, False)
 for operacao in operacoes:
     if (operacao[2][1] == 'R'):
         materia = operacao[2][1]
+        matricula = operacao[0]
         indexMatricula = operacao[1]
         removerDisciplina(materia, indexMatricula)
     elif (operacao[2][1] == 'I'):
         materia = operacao[2][1]
         indexMatricula = operacao[1]
-        adicionarDisciplinas([materia], indexMatricula)
+        disciplinasAtivas = resgatarDisciplinasAtivas(indexMatricula)
+
+        for i in range(0, len(disciplinasAtivas)):
+                disciplinasAtivas[i] = list(disciplinasAtivas[i])
+                disciplinasAtivas[i] = disciplinasAtivas[i][0]
+        
+        disciplinasAtivas.append(materia)
+
+        if (checarMateriaTemVagas(materia) == True):
+            adicionarDisciplinas(disciplinasAtivas, indexMatricula)
+            print(f'Aluno {matricula} está matriculado em {materia}')
+        else:
+            print(f'Não haviam vagas em {materia}')
+
     elif (operacao[2][1] == 'T'):
         materiaInserir = operacao[2][1]
         materiaRemover = operacao[2][2]
         indexMatricula = operacao[1]
+
         removerDisciplina(materiaRemover, indexMatricula)
-        adicionarDisciplinas([materiaInserir], indexMatricula)
+ 
+        disciplinasAtivas = resgatarDisciplinasAtivas(indexMatricula)
+
+        for i in range(0, len(disciplinasAtivas)):
+                disciplinasAtivas[i] = list(disciplinasAtivas[i])
+                disciplinasAtivas[i] = disciplinasAtivas[i][0]
+        
+        disciplinasAtivas.append(materia)
+        adicionarDisciplinas(materia, [materiaInserir], indexMatricula)
 
 
 

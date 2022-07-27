@@ -22,6 +22,62 @@ def checkMatriculaExiste(numero):
 
     return [numeroExiste, index, page['A'][index].value]
 
+def diminuirUmaVaga(codigoDisiciplina):
+    file = os.getcwd() + '/Disciplinas - Trabalho Estrutura de Dados.xlsx'
+    wb = load_workbook(file)
+    page = wb['Obrigatórias CC']
+
+    found = False 
+    for i in range(1, len(page['A'])):
+        if (page['A'][i].value == codigoDisiciplina):
+            if (int(page['H'][i].value) > 0): 
+                page['H'][i].value = int(page['H'][i].value) - 1
+            found = True 
+            break
+    
+    if (found):
+        wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
+        return
+
+    page = wb["Eletivas CC"]
+    if (not found):
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisiciplina):
+                if (int(page['H'][i].value) > 0): 
+                    page['H'][i].value = int(page['G'][i].value) - 1
+                found = True 
+                break
+    
+    wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
+
+def aumentarUmVaga(codigoDisiciplina):
+    file = os.getcwd() + '/Disciplinas - Trabalho Estrutura de Dados.xlsx'
+    wb = load_workbook(file)
+    page = wb['Obrigatórias CC']
+
+    found = False 
+    for i in range(1, len(page['A'])):
+        if (page['A'][i].value == codigoDisiciplina):
+            if (int(page['H'][i].value) > 0): 
+                page['H'][i].value = int(page['H'][i].value) + 1
+            found = True 
+            break
+    
+    if (found):
+        wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
+        return
+
+    page = wb["Eletivas CC"]
+    if (not found):
+        for i in range(1, len(page['A'])):
+            if (page['A'][i].value == codigoDisiciplina):
+                if (int(page['H'][i].value) > 0): 
+                    page['H'][i].value = int(page['G'][i].value) + 1
+                found = True 
+                break
+    
+    wb.save("Disciplinas - Trabalho Estrutura de Dados.xlsx")
+
 def checarMateriaTemVagas(codigoDisciplina):
     file = os.getcwd() + '/Disciplinas - Trabalho Estrutura de Dados.xlsx'
     wb = load_workbook(file)
@@ -76,8 +132,6 @@ def removerDisciplina(codigoDisciplina, index):
     disciplinas = page['H'][index].value
     disciplinas = disciplinas.split(", ")
 
-    print('Tamanho', len(disciplinas))
-
     for i in range(0, len(disciplinas)):
         print(disciplinas[i] == codigoDisciplina)
         if (disciplinas[i] == codigoDisciplina):
@@ -86,19 +140,16 @@ def removerDisciplina(codigoDisciplina, index):
     print(', '.join(disciplinas))
 
     page['H'][index].value = ', '.join(disciplinas)
+    diminuirUmaVaga(codigoDisciplina)
 
-def adicionarDisciplinas(disciplinas, index):
+def adicionarDisciplinas(codigoDisciplina, disciplinas, index):
     file = os.getcwd() + '/dados_dos_alunos.xlsx'
     wb = load_workbook(file)
     page = wb["Página1"]
     
     page['H'][index].value = ', '.join(disciplinas)
-
-    try: 
-        # wb.save("dados_dos_alunos.xlsx")
-        return True 
-    except:
-        return False 
+    aumentarUmVaga(codigoDisciplina)
+    
 
 def resgatarDadosDisciplinas(codigo):
 
