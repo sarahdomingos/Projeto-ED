@@ -226,43 +226,39 @@ for i in operacoes:
 operacoes = sort(operacoes, False)
 
 for operacao in operacoes:
-    if (operacao[2][1] == 'R'):
+    if (operacao[2][0] == 'R'):
         materia = operacao[2][1]
         matricula = operacao[0]
         indexMatricula = operacao[1]
+
         removerDisciplina(materia, indexMatricula)
-    elif (operacao[2][1] == 'I'):
+    elif (operacao[2][0] == 'I'):
+        matricula = operacao[0]
         materia = operacao[2][1]
         indexMatricula = operacao[1]
         disciplinasAtivas = resgatarDisciplinasAtivas(indexMatricula)
-
-        for i in range(0, len(disciplinasAtivas)):
-                disciplinasAtivas[i] = list(disciplinasAtivas[i])
-                disciplinasAtivas[i] = disciplinasAtivas[i][0]
-        
+                
         disciplinasAtivas.append(materia)
 
         if (checarMateriaTemVagas(materia) == True):
-            adicionarDisciplinas(disciplinasAtivas, indexMatricula)
+            adicionarDisciplinas(materia, disciplinasAtivas, indexMatricula)
             print(f'Aluno {matricula} está matriculado em {materia}')
         else:
             print(f'Não haviam vagas em {materia}')
 
-    elif (operacao[2][1] == 'T'):
+    elif (operacao[2][0] == 'T'):
+        matricula = operacao[0]
         materiaInserir = operacao[2][1]
         materiaRemover = operacao[2][2]
         indexMatricula = operacao[1]
+        
+        disciplinasAtivas = resgatarDisciplinasAtivas(indexMatricula)
+        
+        disciplinasAtivas.append(materiaInserir)
+        adicionarDisciplinas(materiaInserir, disciplinasAtivas, indexMatricula)
 
         removerDisciplina(materiaRemover, indexMatricula)
  
-        disciplinasAtivas = resgatarDisciplinasAtivas(indexMatricula)
-
-        for i in range(0, len(disciplinasAtivas)):
-                disciplinasAtivas[i] = list(disciplinasAtivas[i])
-                disciplinasAtivas[i] = disciplinasAtivas[i][0]
-        
-        disciplinasAtivas.append(materia)
-        adicionarDisciplinas(materia, [materiaInserir], indexMatricula)
 
 
 

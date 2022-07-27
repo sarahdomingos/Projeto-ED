@@ -43,8 +43,8 @@ def diminuirUmaVaga(codigoDisiciplina):
     if (not found):
         for i in range(1, len(page['A'])):
             if (page['A'][i].value == codigoDisiciplina):
-                if (int(page['H'][i].value) > 0): 
-                    page['H'][i].value = int(page['G'][i].value) - 1
+                if (int(page['G'][i].value) > 0): 
+                    page['G'][i].value = int(page['G'][i].value) - 1
                 found = True 
                 break
     
@@ -71,8 +71,8 @@ def aumentarUmVaga(codigoDisiciplina):
     if (not found):
         for i in range(1, len(page['A'])):
             if (page['A'][i].value == codigoDisiciplina):
-                if (int(page['H'][i].value) > 0): 
-                    page['H'][i].value = int(page['G'][i].value) + 1
+                if (int(page['G'][i].value) > 0): 
+                    page['G'][i].value = int(page['G'][i].value) + 1
                 found = True 
                 break
     
@@ -89,10 +89,9 @@ def checarMateriaTemVagas(codigoDisciplina):
     for i in range(1, len(page['A'])):
         if (page['A'][i].value == codigoDisciplina):
             found = True
-            print(page['H'][i].value)
             if (int(page['H'][i].value) > 0):
                 temVagas = True
-                page['G'][i].value = int(page['G'][i].value) - 1
+                page['H'][i].value = int(page['H'][i].value) - 1
             break
     
     if (not found):
@@ -132,15 +131,22 @@ def removerDisciplina(codigoDisciplina, index):
     disciplinas = page['H'][index].value
     disciplinas = disciplinas.split(", ")
 
+    print(codigoDisciplina)
+
+    print('000')
+
     for i in range(0, len(disciplinas)):
-        print(disciplinas[i] == codigoDisciplina)
+        print(disciplinas[i])
         if (disciplinas[i] == codigoDisciplina):
             disciplinas.pop(i)
-    
-    print(', '.join(disciplinas))
+            break
 
     page['H'][index].value = ', '.join(disciplinas)
-    diminuirUmaVaga(codigoDisciplina)
+    print("Estamos removendo:")
+    print(codigoDisciplina)
+    aumentarUmVaga(codigoDisciplina)
+
+    wb.save("dados_dos_alunos.xlsx")
 
 def adicionarDisciplinas(codigoDisciplina, disciplinas, index):
     file = os.getcwd() + '/dados_dos_alunos.xlsx'
@@ -148,7 +154,11 @@ def adicionarDisciplinas(codigoDisciplina, disciplinas, index):
     page = wb["Página1"]
     
     page['H'][index].value = ', '.join(disciplinas)
-    aumentarUmVaga(codigoDisciplina)
+    diminuirUmaVaga(codigoDisciplina)
+
+    print("Estamos adicionando:")
+    print(codigoDisciplina)
+    wb.save("dados_dos_alunos.xlsx")
     
 
 def resgatarDadosDisciplinas(codigo):
